@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useRef, useMemo, useEffect } from "react";
 import chroma from "chroma-js";
-import { Noise, LayerMaterial, Depth, Fresnel } from "lamina";
+import { Noise, LayerMaterial, Depth, Fresnel, Displace } from "lamina";
 import getTemperature from "./getTemperature";
 const Star = ({ scale = 1, spectraltype = "M" }) => {
   const starRef = useRef();
@@ -12,6 +12,7 @@ const Star = ({ scale = 1, spectraltype = "M" }) => {
   const noise2 = useRef();
   const noise3 = useRef();
   const noise4 = useRef();
+  const displace = useRef();
 
   let temperature = getTemperature(spectraltype);
 
@@ -29,11 +30,11 @@ const Star = ({ scale = 1, spectraltype = "M" }) => {
 
   useFrame((state, delta) => {
     starRef.current.rotation.y += 0.00005;
-    // const elapsedTime = state.clock.getElapsedTime();
     noise1.current.scale += Math.sin(delta * 0.25);
     noise2.current.scale += Math.sin(delta * 0.25);
     noise3.current.scale += Math.sin(delta * 0.5);
     noise4.current.scale += Math.sin(delta * 0.125);
+    displace.current.scale += Math.sin(delta * 0.125);
 
     // displace.current.scale += Math.sin(delta * 0.05);
   });
@@ -90,6 +91,7 @@ const Star = ({ scale = 1, spectraltype = "M" }) => {
           mode={"divide"}
           alpha={1}
         />
+        <Displace ref={displace} strength={0.005} scale={800} intensity={0.1} mapping="world" />
       </LayerMaterial>
     </mesh>
   );
