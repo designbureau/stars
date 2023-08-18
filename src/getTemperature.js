@@ -1,5 +1,8 @@
 const getTemperature = ( spectraltype = "F") => {
   let temperature;
+
+  spectraltype = spectraltype[0].charAt(0);
+
   switch (spectraltype) {
     case "M":
       temperature = 3000;
